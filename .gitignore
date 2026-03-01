@@ -1,2 +1,23 @@
-*.json
-!mcp.json
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# Build
+work/
+out/
+archlive/work/
+archlive/out/
+
+# Secrets
+*.env
+host_secrets.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+
+# macOS
+.DS_Store
