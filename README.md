@@ -10,7 +10,7 @@
 
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
   [![Based On](https://img.shields.io/badge/Based%20On-Arch%20Linux-blue)](https://archlinux.org/)
-  [![Discord](https://img.shields.io/badge/Discord-Join%20Community-7289DA)](https://discord.gg/your-invite-link)
+  [![Discord](https://img.shields.io/badge/Discord-Join%20Community-7289DA)](https://discord.gg/tkg6XQBPpK)
   [![Status](https://img.shields.io/badge/Status-Pre--Alpha-red)]()
 
   [**Website**](https://yantraos.com) | [**Documentation**](https://yantraos.gitbook.io) | [**Roadmap**](https://github.com/orgs/YantraOS/projects/1)
