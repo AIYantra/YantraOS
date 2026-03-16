@@ -27,9 +27,9 @@ cp -r core/* archlive/airootfs/opt/yantra/core/
 # 5. Securely copies the secrets.env file and sets permissions.
 echo "Creating and copying secrets.env..."
 cat << 'EOF' > secrets.env
-YANTRA_TELEMETRY_TOKEN=6f3595fabc679e6a17ad2694dd6a472ce1d3909fddbae4c5da1b7c1cd5c62f8a
-YANTRA_KRIYA_TOKEN=695f0dd6a855615ee67e29797626fd983e7976d5b0334b044ba9259abe923a6b
-GOOGLE_GENERATIVE_AI_API_KEY=<GOOGLE_API_KEY_REDACTED>
+YANTRA_TELEMETRY_TOKEN=<REDACTED_FOR_PUBLIC_REPO>
+YANTRA_KRIYA_TOKEN=<REDACTED_FOR_PUBLIC_REPO>
+GOOGLE_GENERATIVE_AI_API_KEY=<REDACTED_FOR_PUBLIC_REPO>
 EOF
 
 cp secrets.env archlive/airootfs/etc/yantra/
