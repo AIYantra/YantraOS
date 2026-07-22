@@ -11,7 +11,7 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
-SOURCE_FILE = Path("/run/archiso/bootmnt/yantra-secrets.env")
+SOURCE_FILE = Path(os.environ.get("YANTRA_SECRETS_SOURCE", "/run/archiso/bootmnt/yantra-secrets.env"))
 KEYVAULT_CONFIG = Path("/etc/yantra/keyvault.json")
 OUTPUT_DIR = Path("/etc/yantra")
 MAX_SOURCE_BYTES = 64 * 1024
@@ -161,9 +161,25 @@ def _atomic_private_write(path: Path, data: bytes) -> None:
             pass
 
 
+def _read_existing_daemon_environment() -> bytes | None:
+    path = OUTPUT_DIR / "daemon.env"
+    if not path.exists():
+        return None
+    if path.is_symlink() or not path.is_file():
+        raise RuntimeError("Existing daemon credential file is unsafe")
+    metadata = path.stat()
+    if metadata.st_uid != 0 or metadata.st_mode & 0o077:
+        raise RuntimeError("Existing daemon credential file must be root-owned mode 0600")
+    return _read_bounded(path)
+
+
 def main() -> None:
     if os.geteuid() != 0:
         raise SystemExit("Secret provisioning must run as root")
+    data = _read_existing_daemon_environment()
+    if data is not None:
+        parse_environment(data)
+        return
     data = _read_bounded(SOURCE_FILE) if SOURCE_FILE.exists() else _fetch_keyvault_secret()
     values = parse_environment(data)
     _atomic_private_write(OUTPUT_DIR / "daemon.env", _serialize(values, DAEMON_KEYS))

@@ -90,6 +90,7 @@ sdparm
 # ── Arch Installation & Recovery Tools ──────────────────────────────────────
 arch-install-scripts
 archinstall
+calamares
 clonezilla
 ddrescue
 diffutils
@@ -116,6 +117,23 @@ foot-terminfo
 kitty-terminfo
 rxvt-unicode-terminfo
 terminus-font
+
+# ── Installer Desktop ────────────────────────────────────────────────────────
+# Calamares runs in the persistent Plasma session shipped by the installed OS.
+plasma-desktop
+plasma-workspace
+sddm
+konsole
+polkit
+xorg-xwayland
+kcoreaddons
+kpmcore
+libpwquality
+qt6-declarative
+qt6-svg
+yaml-cpp
+python-yaml
+python-jsonschema
 
 # ── Accessibility ───────────────────────────────────────────────────────────
 brltty

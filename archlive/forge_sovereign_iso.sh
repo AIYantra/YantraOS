@@ -7,7 +7,7 @@
 # auditable pipeline:
 #
 #   verify_dependencies → scaffold_airootfs → inject_kriya_loop
-#                       → compile_iso → sign_artifact
+#                       → build_calamares → compile_iso → sign_artifact
 #
 # DESIGN PRINCIPLES
 #   • Ephemeral by construction: the profile is assembled in a scratch dir
@@ -57,6 +57,9 @@ readonly -A REQUIRED_PKGS=(
   [rsync]="rsync"
   [gpg]="gnupg"
   [docker]="docker"
+  [mkarchroot]="devtools"
+  [makechrootpkg]="devtools"
+  [repo-add]="pacman-contrib"
 )
 
 # Systemd units symlinked into multi-user.target.wants on the live node.
@@ -67,6 +70,7 @@ readonly -a BASE_SERVICES=(
 # Custom YantraOS units (live in /etc/systemd/system, staged from deploy/systemd).
 readonly -a YANTRA_SERVICES=(
   "yantra-provision-secrets.service" "yantra-sandbox-broker.service"
+  "yantra-host-executor.service"
   "yantra.service"
 )
 
@@ -74,6 +78,7 @@ readonly -a YANTRA_SERVICES=(
 BUILD_PROFILE=""    # ephemeral assembled-profile dir (mktemp)
 AIROOTFS=""         # ${BUILD_PROFILE}/airootfs
 VENV_BUILD_DIR=""   # ephemeral venv-compilation chroot
+CALAMARES_REPO=""   # ephemeral local repository for the pinned package
 
 # ── Logging ───────────────────────────────────────────────────────────────────
 readonly C_RED='\033[0;31m' C_GRN='\033[0;32m' C_YEL='\033[1;33m' C_CYN='\033[0;36m' C_NC='\033[0m'
@@ -147,6 +152,7 @@ verify_dependencies() {
   [[ -d "${RELENG_SRC}" ]]   || die "Baseline releng profile not found: ${RELENG_SRC} (install 'archiso')."
   [[ -d "${PROFILE_SRC}" ]]  || die "YantraOS profile overlay not found: ${PROFILE_SRC}"
   [[ -f "${PROFILE_SRC}/profiledef.sh" ]] || die "Missing profiledef.sh in ${PROFILE_SRC}"
+  [[ -f "${PROFILE_SRC}/calamares/PKGBUILD" ]] || die "Missing pinned Calamares PKGBUILD."
   local source_dir
   for source_dir in core scripts deploy; do
     [[ -d "${SCRIPT_DIR}/../${source_dir}" ]] \
@@ -216,6 +222,55 @@ scaffold_airootfs() {
   provision_global_binaries
 }
 
+# Build Calamares in a clean Arch chroot. The package source is checksum-pinned
+# in the tracked PKGBUILD; the resulting unsigned local package never leaves
+# the ephemeral profile directory.
+build_calamares() {
+  log_info "═══ build_calamares ═══"
+  local build_dir="${BUILD_PROFILE}/calamares-build"
+  local chroot_dir="${BUILD_ROOT}/yantra-calamares-chroot"
+  local build_uid="${SUDO_UID:-0}"
+  local build_user
+  local calamares_build_packages=(
+    base-devel cmake extra-cmake-modules libglvnd ninja pybind11 qt6-tools
+    qt6-translations kcoreaddons kpmcore libpwquality qt6-declarative qt6-svg
+    yaml-cpp python python-yaml python-jsonschema
+  )
+  build_user="$(id -un "${build_uid}")"
+  CALAMARES_REPO="${BUILD_PROFILE}/calamares-repo"
+  install -dm755 "${build_dir}" "${CALAMARES_REPO}" "${chroot_dir}"
+  install -Dm644 "${PROFILE_SRC}/calamares/PKGBUILD" "${build_dir}/PKGBUILD"
+  chown -R "${build_uid}:$(id -gn "${build_uid}")" "${build_dir}"
+
+  if [[ ! -d "${chroot_dir}/root" ]]; then
+    mkarchroot -C /etc/pacman.conf -M /etc/makepkg.conf "${chroot_dir}/root" \
+      "${calamares_build_packages[@]}"
+  fi
+
+  (
+    cd -- "${build_dir}"
+    makechrootpkg -U "${build_user}" -r "${chroot_dir}" -c -u -- --nocheck
+  )
+
+  local package
+  shopt -s nullglob
+  local packages=("${build_dir}"/calamares-[0-9]*.pkg.tar.zst)
+  shopt -u nullglob
+  (( ${#packages[@]} == 1 )) || die "Expected exactly one Calamares package, found ${#packages[@]}."
+  package="${packages[0]}"
+  install -Dm644 "${package}" "${CALAMARES_REPO}/$(basename -- "${package}")"
+  repo-add "${CALAMARES_REPO}/yantra-local.db.tar.zst" \
+    "${CALAMARES_REPO}/$(basename -- "${package}")"
+
+  cat >> "${BUILD_PROFILE}/pacman.conf" <<EOF
+
+[yantra-local]
+SigLevel = Optional TrustAll
+Server = file://${CALAMARES_REPO}
+EOF
+  log_ok "Pinned Calamares package built into the ephemeral local repository."
+}
+
 stage_sandbox_image() {
   log_info "── stage_sandbox_image ──"
   local archive="${AIROOTFS}${SANDBOX_ARCHIVE}"
@@ -279,7 +334,12 @@ wire_systemd() {
     "${AIROOTFS}/usr/lib/tmpfiles.d/yantra.conf"
   # /etc/yantra/secrets.env is intentionally absent. Provision it root:root
   # 0600 after boot, then restart the services that consume it.
-  log_ok "Systemd matrix wired: ${#BASE_SERVICES[@]} base + ${#YANTRA_SERVICES[@]} YantraOS units."
+
+  # Enable graphical target and SDDM for the live installer
+  ln -sf /usr/lib/systemd/system/sddm.service "${sysd}/display-manager.service"
+  ln -sf /usr/lib/systemd/system/graphical.target "${sysd}/default.target"
+
+  log_ok "Systemd matrix wired: ${#BASE_SERVICES[@]} base + ${#YANTRA_SERVICES[@]} YantraOS units + Graphical Target."
 }
 
 # ── 2.x — Identity + filesystem scaffold ──────────────────────────────────────
@@ -555,6 +615,7 @@ main() {
   verify_dependencies
   scaffold_airootfs
   inject_kriya_loop
+  build_calamares
   compile_iso
   sign_artifact
   log_ok "Forge complete. Signed artifacts in ${OUT_DIR}."

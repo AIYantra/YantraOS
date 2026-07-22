@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [Unreleased] — Vision 2 Phase 0
+
+### Added
+- **CLI/API Fast Paths** — REASON visibly selects deterministic file/app commands or the screenshot loop and logs why.
+- **Hardened M7 Artifacts** — Signed ArchISO and fixed Azure VHD builds with QEMU boot validation.
+- **Azure Native Provisioning** — Managed identity retrieves allowlisted runtime secrets from Key Vault; a native systemd health marker validates stable daemon startup.
+
+### Changed
+- **Phase 0 Complete** — P0.1–P0.5 were manually tested and accepted on 2026-07-21.
+- **Secret Handling** — Supersedes the v0.2.4 behavior below: operational credentials are never embedded in ISO/VHD artifacts.
+
+### Security
+- Root Host Executor remains isolated from desktop actions; model scripts remain sandbox-only.
+- Azure nodes use deny-all inbound networking, locked accounts, Key Vault RBAC, and managed identity.
+
+---
+
 ## [0.2.4] — 2026-07-09
 
 ### Added

@@ -33,3 +33,12 @@ Please consult the QUICKSTART.md for instructions on flashing the ISO, establish
 - **Cognitive Override Fix:** Permanent resolution of LLM hallucinations during priority injections via strict prompt isolation and conversation history wiping.
 - **Cloud Forge Integrity:** Automated injection of Azure OpenAI API keys into VHD builds.
 - **File Hygiene:** Cleanup of large JSON telemetry dumps and audit logs.
+
+---
+
+### Vision 2 Phase 0 / M7 — Verified July 21, 2026
+- P0.1–P0.5 completed and manually tested.
+- REASON now explains `CLI_FAST_PATH` versus `COMPUTER_USE`; deterministic file/app operations skip screenshots.
+- Hardened signed ISO and fixed VHD built and boot-tested in QEMU.
+- Azure VHD deployed successfully with deny-all inbound networking, managed identity, Key Vault runtime provisioning, sandbox startup, and native health validation.
+- This supersedes historical v0.2.4 secret injection: operational credentials are no longer embedded in reusable images.

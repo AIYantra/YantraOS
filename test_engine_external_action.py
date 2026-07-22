@@ -50,13 +50,10 @@ class EngineExternalActionTests(unittest.IsolatedAsyncioTestCase):
         ]
         self.engine._injection_retry_count = 2
 
-        with (
-            patch("core.engine.stream_complete") as stream_complete,
-            self.assertLogs("yantra.engine", level="INFO") as captured,
-        ):
+        with self.assertLogs("yantra.engine", level="INFO") as captured:
             await self.engine._phase_reason()
 
-        stream_complete.assert_not_called()
+
         self.assertEqual(self.engine._pending_injections, [])
         self.assertEqual(self.engine._injection_retry_count, 0)
         self.assertEqual(len(self.engine._state.pending_actions), 1)

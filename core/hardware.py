@@ -31,7 +31,6 @@ class GPUState:
     vram_total_gb: float = 0.0
     gpu_util_pct: float = 0.0
     temp_c: int = 0
-    power_w: float = 0.0
     vendor: str = "unknown"     # "nvidia", "amd", "intel", "unknown"
 
 

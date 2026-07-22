@@ -395,19 +395,6 @@ class ComplianceExecutor:
         if intent == "CONSENT_REVOKED":
             self.immediate_data_purge()
 
-    def store_telemetry(self, data: str):
-        """Stores a piece of telemetry data."""
-        if not isinstance(data, str) or len(data.encode("utf-8")) > _MAX_TELEMETRY_BYTES:
-            raise ValueError("Telemetry must be a bounded string")
-        timestamp = time.time()
-        telemetry_id = str(uuid.uuid4())
-        with closing(self._connect()) as conn:
-            cursor = conn.cursor()
-            cursor.execute(
-                "INSERT INTO telemetry_store (id, timestamp, data) VALUES (?, ?, ?)",
-                (telemetry_id, timestamp, data)
-            )
-            conn.commit()
 
     def immediate_data_purge(self):
         """

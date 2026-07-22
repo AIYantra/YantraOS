@@ -8,7 +8,7 @@ import functools
 import logging
 import os
 import time
-from typing import Any, AsyncIterator
+from typing import Any
 
 log = logging.getLogger("yantra.hybrid_router")
 
@@ -220,21 +220,3 @@ async def complete(
 
     return content
 
-async def stream_complete(
-    messages: list[dict[str, str]],
-    *,
-    cognitive_tier: str = "SENSE",
-    timeout: float = INFERENCE_TIMEOUT_SECS,
-) -> AsyncIterator[str]:
-    content = await complete(messages, cognitive_tier=cognitive_tier, timeout=timeout, stream=False)
-    if isinstance(content, str):
-        yield content
-    else:
-        try:
-            text = content.choices[0].message.content or ""
-            yield text
-        except Exception:
-            yield str(content)
-
-def select_model_group(vram_total_gb: float, vram_used_gb: float) -> str:
-    return TieredRouter.LUNA

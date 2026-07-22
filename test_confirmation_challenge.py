@@ -24,23 +24,7 @@ class ActionConfirmationTests(unittest.TestCase):
         confirmation.COUNTER_PATH = self.original_counter
         self.temporary.cleanup()
 
-    def test_run_count_never_self_approves_sensitive_actions(self) -> None:
-        confirmation._write_counter(10_000)
-        actions = (
-            {"action": "open_url", "url": "https://example.com"},
-            {"action": "navigate_and_extract", "url": "https://example.com"},
-            {"action": "create_dummy_file", "path": "notes.txt"},
-            {"action": "file_management", "operation": "move", "path": "a"},
-            {"action": "computer_use_task", "instruction": "Open settings"},
-        )
-        with (
-            patch.object(confirmation.sys.stdin, "isatty", return_value=False),
-            patch.object(confirmation.audit_log, "log_action"),
-        ):
-            for action in actions:
-                with self.subTest(action=action):
-                    self.assertTrue(confirmation.requires_confirmation(action))
-                    self.assertFalse(confirmation.confirm_action(action))
+
 
     def test_counter_directory_and_file_are_private(self) -> None:
         confirmation._write_counter(7)

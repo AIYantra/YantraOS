@@ -142,13 +142,7 @@ class FileManagementTests(unittest.TestCase):
             created = Path(directory, "YantraOS", "notes.txt")
             self.assertEqual(created.read_text(encoding="utf-8"), "private contents")
             self.assertEqual(created.stat().st_mode & 0o777, 0o600)
-            self.assertTrue(bridge.created_file_matches({
-                "path": "notes.txt", "content": "private contents"
-            }, str(Path(directory, "YantraOS"))))
-            created.write_text("changed", encoding="utf-8")
-            self.assertFalse(bridge.created_file_matches({
-                "path": "notes.txt", "content": "private contents"
-            }, str(Path(directory, "YantraOS"))))
+
             with self.assertRaisesRegex(ValueError, "overwrite"):
                 bridge.prepare_file_management({
                     "action": "file_management",
@@ -207,38 +201,6 @@ class FileManagementTests(unittest.TestCase):
                 with self.subTest(payload=payload), self.assertRaises(ValueError):
                     bridge.prepare_file_management(payload)
 
-    def test_destructive_gui_actions_are_blocked_before_ydotool(self):
-        blocked = (
-            {"action": "click", "x": 10, "y": 10, "button": "right"},
-            {"action": "key", "key": "111:1 111:0"},
-            {"action": "key", "key": "42:1 111:1 111:0 42:0"},
-            {"action": "key", "key": "29:1 38:1 38:0 29:0"},
-            {"action": "key", "key": "125:1 125:0"},
-            {"action": "clipboard_copy", "text": "replacement"},
-        )
-        for action in blocked:
-            with self.subTest(action=action), self.assertRaises(ValueError):
-                bridge.validate_file_management_action(action, img_w=640, img_h=480)
-
-        bridge.validate_file_management_action(
-            {"action": "click", "x": 500, "y": 300}, img_w=640, img_h=480
-        )
-        bridge.validate_file_management_action({"action": "clipboard_paste"})
-        bridge.validate_file_management_action({"action": "key", "key": "29:1 30:1 30:0 29:0"})
-
-        with self.assertRaisesRegex(ValueError, "visually verified"):
-            bridge.validate_file_management_action(
-                {"action": "click", "x": 500, "y": 300},
-                "create",
-                640,
-                480,
-            )
-        bridge.validate_file_management_action(
-            {"action": "key", "key": "63:1 63:0"}, "create"
-        )
-        bridge.validate_file_management_action(
-            {"action": "done", "success": True}, "create"
-        )
 
     def test_managed_root_rejects_escape_and_symlink_then_repairs_owned_mode(self):
         payload = {"action": "file_management", "operation": "read", "path": "notes.txt"}

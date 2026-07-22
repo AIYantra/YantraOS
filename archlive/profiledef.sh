@@ -36,8 +36,13 @@ file_permissions=(
 
   # ── YantraOS global binary wrappers ─────────────────────────────────────────
   ["/usr/bin/yantra-snapshot"]="0:0:0755"
+  ["/usr/local/lib/yantra/calamares-finalize"]="0:0:0755"
 
   # ── YantraOS secrets directory ─────────────────────────────────────────────
   # Root-owned, yantra-group-readable. No world access.
   ["/etc/yantra"]="0:0:0750"
+
+  # ── Polkit Rules ───────────────────────────────────────────────────────────
+  ["/etc/polkit-1/rules.d"]="102:0:0750"
+  ["/etc/polkit-1/rules.d/49-yantra-calamares.rules"]="0:0:0644"
 )

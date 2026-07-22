@@ -64,6 +64,16 @@ class SecretProvisioningTests(unittest.TestCase):
             with patch.object(provision, "KEYVAULT_CONFIG", path), self.assertRaises(RuntimeError):
                 provision._read_bounded(path)
 
+    def test_existing_daemon_environment_must_be_root_private(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary, "yantra")
+            root.mkdir()
+            daemon = root / "daemon.env"
+            daemon.write_bytes(VALID)
+            daemon.chmod(0o644)
+            with patch.object(provision, "OUTPUT_DIR", root), self.assertRaises(RuntimeError):
+                provision._read_existing_daemon_environment()
+
     def test_azure_secret_names_allow_hyphens_and_full_length(self):
         self.assertTrue(provision.AZURE_SECRET_NAME.fullmatch("yantra-runtime-env"))
         self.assertTrue(provision.AZURE_SECRET_NAME.fullmatch("a"))

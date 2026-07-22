@@ -535,16 +535,6 @@ def prepare_file_management(intent: dict[str, Any]) -> str:
         os.close(root_fd)
 
 
-def created_file_matches(intent: dict[str, Any], root: str) -> bool:
-    try:
-        path = Path(root) / intent["path"]
-        return path.is_file() and path.read_bytes() == intent.get("content", "").encode(
-            "utf-8"
-        )
-    except (KeyError, OSError, UnicodeError):
-        return False
-
-
 def validate_model_action(
     action: Any,
     img_w: int | None = None,
@@ -628,43 +618,6 @@ def validate_model_action(
             raise ValueError("Completion success must be boolean.")
 
     return action
-
-
-def validate_file_management_action(
-    action: dict[str, Any],
-    operation: str | None = None,
-    img_w: int | None = None,
-    img_h: int | None = None,
-) -> None:
-    """Reject GUI actions that can delete, escape, or replace staged content."""
-    validate_model_action(action, img_w, img_h)
-    action_type = action.get("action")
-    if action_type not in {
-        "click", "type", "key", "wait", "clipboard_copy", "clipboard_paste", "done"
-    }:
-        raise ValueError(f"File-management GUI action is not allowed: {action_type!r}")
-    if operation == "create" and action_type not in {"key", "wait", "done"}:
-        raise ValueError("Created files may only be refreshed or visually verified.")
-    if action_type == "click" and action.get("button", "left") != "left":
-        raise ValueError("Right-click menus are disabled for file management.")
-    if action_type == "clipboard_copy" and "text" in action:
-        raise ValueError("Replacing staged file content is disabled.")
-    if action_type != "key":
-        return
-
-    events = str(action.get("key", "")).split()
-    try:
-        codes = {int(event.split(":", 1)[0]) for event in events}
-    except (ValueError, IndexError) as exc:
-        raise ValueError("Malformed ydotool key sequence.") from exc
-    if not events or any(":" not in event for event in events):
-        raise ValueError("Malformed ydotool key sequence.")
-    if codes & {14, 56, 100, 111, 125, 126}:
-        raise ValueError("Navigation, launcher, Alt, and deletion keys are disabled.")
-    if 29 in codes and 38 in codes:
-        raise ValueError("Ctrl+L is disabled for file management.")
-    if operation == "create" and codes != {63}:
-        raise ValueError("Only F5 refresh is allowed while verifying a created file.")
 
 
 def execute_action(

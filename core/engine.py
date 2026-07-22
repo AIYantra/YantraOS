@@ -39,7 +39,7 @@ from .hardware import probe_gpu, probe_cpu_disk, get_ssh_telemetry
 from .compliance_executor import ComplianceExecutor
 from .vector_memory import get_memory
 from .hybrid_router import (
-    select_model_group, stream_complete, INFERENCE_TIMEOUT_SECS,
+    INFERENCE_TIMEOUT_SECS,
     detect_hardware_capability, InferenceAuthError, get_last_routing_tier,
 )
 from .sandbox_client import (
@@ -270,10 +270,7 @@ class KriyaState:
     active_model: str = "unknown"
     inference_routing: str = "PENDING"
 
-    vram_allocation_mb: int = 0
     ram_percent: float = 0.0
-    inference_tps: float = 0.0
-    context_window_tokens: int = 0
 
     pending_actions: TrackedActionQueue = field(default_factory=TrackedActionQueue)
     consecutive_failures: int = 0
@@ -355,8 +352,6 @@ class KriyaLoopEngine:
         self._state.cpu_pct = cpu_pct
         self._state.disk_free_gb = disk_free_gb
         self._state.ram_percent = ram_pct
-
-        self._state.vram_allocation_mb = int(self._state.vram_used_gb * 1024)
         
         self._state.ssh_auth_logs = await get_ssh_telemetry()
 
@@ -517,16 +512,7 @@ class KriyaLoopEngine:
                 timeout=INFERENCE_TIMEOUT_SECS,
             )
 
-            inference_elapsed: float = time.monotonic() - inference_start
-            approx_output_tokens: int = max(1, len(accumulated_response) // 4)
-            if inference_elapsed > 0:
-                self._state.inference_tps = round(approx_output_tokens / inference_elapsed, 2)
-            else:
-                self._state.inference_tps = 0.0
             
-            approx_input_tokens: int = len(user_content) // 4
-            self._state.context_window_tokens = approx_input_tokens + approx_output_tokens
-
             # ── Sync routing tier from the TieredRouter ──────────────────
             self._state.inference_routing = get_last_routing_tier()
 

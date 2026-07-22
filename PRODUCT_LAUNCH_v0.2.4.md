@@ -659,6 +659,8 @@ python3 -m core.tui_shell  # Launch the TUI (separate terminal)
 
 ## 15. WHAT'S NEXT — ROADMAP
 
+> **Post-v0.2.4 addendum (July 21, 2026):** This launch snapshot's roadmap is superseded by `../YantraOS_Vision_2_Roadmap.md`. Vision 2 Phase 0 (P0.1–P0.5) and M7 are complete and manually verified: fast-path routing, signed ISO/QEMU boot, fixed VHD/QEMU boot, and hardened Azure managed-identity/Key Vault deployment all succeeded. Operational secrets are no longer embedded in images.
+
 | Priority | Feature | Status |
 |----------|---------|--------|
 | High | **Multi-node fleet management** — Alpha + Edge topology | In design |

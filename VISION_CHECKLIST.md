@@ -1,9 +1,9 @@
 # Vision Checklist
 
-- [ ] Extract information from a URL using an isolated browser session
-- [ ] Browser automation
+- [x] Extract information from a URL using an isolated browser session — manually verified 2026-07-21
+- [x] Browser automation — manually verified 2026-07-21
 - [ ] Download and install software
-- [ ] Launch applications
+- [x] Launch applications — CLI fast path and visual path manually verified 2026-07-21
 - [ ] Window management
-- [ ] File management
+- [x] File management — create/move fast paths manually verified 2026-07-21
 - [ ] Long-running tasks execution and management

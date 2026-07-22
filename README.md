@@ -22,7 +22,7 @@
 [![Engine](https://img.shields.io/badge/Engine-Python%203.12%20%7C%20Asyncio-FFD700?style=for-the-badge&logo=python&logoColor=000000)](https://python.org)
 [![UI](https://img.shields.io/badge/Interface-Pure%20TUI%20%7C%20Textual-0057FF?style=for-the-badge&logo=gnometerminal&logoColor=white)]()
 [![Status](https://img.shields.io/badge/Status-v0.2.4-00FF41?style=for-the-badge)](https://github.com/AIYantra/YantraOS/releases/tag/v0.2.4)
-[![Phase](https://img.shields.io/badge/Phase-Security%20Hardening%20%2B%20Telegram%20C2-FFB000?style=for-the-badge)](CHANGELOG.md)
+[![Phase](https://img.shields.io/badge/Phase-Vision%202%20P0%20%2B%20M7%20Complete-FFB000?style=for-the-badge)](CHANGELOG.md)
 [![IPC](https://img.shields.io/badge/IPC-UNIX%20Domain%20Socket-00FF41?style=for-the-badge&logo=linux&logoColor=000000)]()
 [![Discord](https://img.shields.io/discord/1472285496129355847?color=00E5FF&label=Sovereign%20Fleet&logo=discord&logoColor=101010&style=for-the-badge)](https://discord.gg/tkg6XQBPpK)
 
@@ -376,7 +376,7 @@ cd archlive
 sudo -E bash forge_sovereign_iso.sh
 ```
 
-The ISO will be written to `archlive/out/yantraos-*.iso`.
+The signed ISO is written to `/opt/yantra-releases/yantraos-*.iso`.
 
 ### Test in QEMU
 
@@ -385,7 +385,7 @@ qemu-system-x86_64 \
   -m 4G \
   -enable-kvm \
   -cpu host \
-  -drive file=archlive/out/yantraos-*.iso,format=raw,if=virtio \
+  -cdrom /opt/yantra-releases/yantraos-*.iso \
   -nographic \
   -serial mon:stdio
 ```
@@ -420,7 +420,9 @@ python3 -m core.daemon
 
 ---
 
-## `12` · CURRENT STATE · v1.0 ALPHA RC2
+## `12` · CURRENT STATE · VISION 2 PHASE 0 / M7 COMPLETE
+
+**Manually verified July 21, 2026:** deterministic CLI/API fast paths, screenshot computer use, signed ISO boot in QEMU, fixed VHD boot in QEMU, and hardened Azure deployment through managed identity and Key Vault. The validated artifacts are build-complete; public ISO publication remains a separate Phase 1 task.
 
 ```
   MILESTONE TRACKER                    STATUS: v1.0 ALPHA RC2 [✓]
@@ -475,9 +477,16 @@ python3 -m core.daemon
   [✓] Archiso packaging daemon bootstrap fix via PYTHONPATH injection
   [✓] forge_sovereign_iso.sh path and ownership boundaries hardened
 
+  VISION 2 PHASE 0
+  [✓] Azure credential rotation and artifact secret remediation
+  [✓] CLI/API fast-path routing with visible route explanation
+  [✓] YC demo rehearsal: fast path versus screenshot loop
+  [✓] Signed hardened ISO built and booted in QEMU
+  [✓] Fixed VHD built, booted in QEMU, and deployed successfully to Azure
+
   ONGOING
   [~] Restricted SSH whitelisted command gateway
-  [ ] Full LLM -> Docker -> SSH -> Host end-to-end test
+  [✓] Typed-intent -> sandbox/external bridge -> audit/circuit-breaker tests
   [ ] NVIDIA driver injection on live ISO
   [ ] Multi-node fleet management (Alpha + Edge topology)
 ```

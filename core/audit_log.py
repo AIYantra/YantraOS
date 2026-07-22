@@ -140,11 +140,6 @@ def _open_audit_file() -> int:
         os.close(parent_fd)
 
 
-def _resolve_log_path() -> str:
-    """Validate or securely create the configured audit file."""
-    fd = _open_audit_file()
-    os.close(fd)
-    return os.fspath(AUDIT_LOG_PATH)
 
 
 def _value_bytes(value: Any) -> bytes:

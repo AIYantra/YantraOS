@@ -1,0 +1,26 @@
+# Maintainer: YantraOS
+pkgname=calamares
+pkgver=3.4.2
+pkgrel=1
+pkgdesc="Distribution-independent installer framework"
+arch=(x86_64)
+url="https://codeberg.org/Calamares/calamares"
+license=(GPL-3.0-or-later)
+depends=(kcoreaddons kpmcore libpwquality qt6-declarative qt6-svg yaml-cpp python python-yaml python-jsonschema)
+makedepends=(cmake extra-cmake-modules libglvnd ninja pybind11 qt6-tools qt6-translations)
+source=("${pkgname}-${pkgver}.tar.gz::${url}/releases/download/v${pkgver}/${pkgname}-${pkgver}.tar.gz")
+sha256sums=(733bbbb00dc9f84874bd5c22960952f317ea2537565431179fa2152b2fbfdccc)
+
+build() {
+  cmake -S "${pkgname}-${pkgver}" -B build -G Ninja \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DWITH_QT6=ON \
+    -DWITH_PYTHONQT=ON \
+    -DBUILD_TESTING=OFF
+  cmake --build build
+}
+
+package() {
+  DESTDIR="${pkgdir}" cmake --install build
+}

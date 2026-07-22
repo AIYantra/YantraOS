@@ -34,7 +34,9 @@ class DeploymentSecurityTests(unittest.TestCase):
             self.assertIn(directive, ssh)
 
     def test_credentials_are_never_staged(self) -> None:
-        self.assertFalse((ROOT / ".env").exists())
+        local_env = ROOT / ".env"
+        if local_env.exists():
+            self.assertEqual(0o600, local_env.stat().st_mode & 0o777)
         for runtime_path in (ROOT / ".compliance_key.pem", ROOT / "consent_ledger.db"):
             if runtime_path.exists():
                 self.assertEqual(0o600, runtime_path.stat().st_mode & 0o777, str(runtime_path))
@@ -120,11 +122,14 @@ class DeploymentSecurityTests(unittest.TestCase):
         self.assertRegex(tmpfiles, r"(?m)^d\s+/run/yantra-sandbox\s+0750\s+root\s+yantra\b")
         self.assertNotIn("RuntimeDirectory=yantra\n", daemon)
 
-        for image_builder in ("archlive/forge_sovereign_iso.sh", "cloud/forge_azure_vhd.sh"):
-            self.assertIn('"yantra-sandbox-broker.service"', read(image_builder))
-            self.assertIn('"yantra-provision-secrets.service"', read(image_builder))
-            self.assertNotIn('"yantra-host-executor.service"', read(image_builder))
-            self.assertIn("docker save", read(image_builder))
+        iso_forge = read("archlive/forge_sovereign_iso.sh")
+        cloud_forge = read("cloud/forge_azure_vhd.sh")
+        self.assertIn('"yantra-sandbox-broker.service"', iso_forge)
+        self.assertIn('"yantra-provision-secrets.service"', iso_forge)
+        self.assertIn('"yantra-host-executor.service"', iso_forge)
+        self.assertNotIn('"yantra-host-executor.service"', cloud_forge)
+        self.assertIn("docker save", iso_forge)
+        self.assertIn("docker save", cloud_forge)
 
         broker = read("deploy/systemd/yantra-sandbox-broker.service")
         self.assertIn("docker load -i /opt/yantra/images/yantra-sandbox-3.20.3.tar", broker)

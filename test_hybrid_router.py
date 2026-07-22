@@ -6,9 +6,7 @@ import sys
 import types
 import unittest
 from unittest.mock import MagicMock, patch
-
-from core.hybrid_router import TieredRouter, select_model_group
-
+from core.hybrid_router import TieredRouter
 
 class HybridRouterTests(unittest.TestCase):
     def setUp(self) -> None:
@@ -42,8 +40,6 @@ class HybridRouterTests(unittest.TestCase):
             self.router._get_model_for_phase("NOVEL"), "local/deepseek-v4"
         )
 
-    def test_active_model_defaults_to_luna(self) -> None:
-        self.assertEqual(select_model_group(0, 0), TieredRouter.LUNA)
 
     def test_cloud_fallback_order(self) -> None:
         self.assertEqual(TieredRouter._CLOUD_FALLBACKS[TieredRouter.SOL], TieredRouter.TERRA)

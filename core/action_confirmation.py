@@ -166,15 +166,6 @@ def get_run_number() -> int:
     return _read_counter() + 1
 
 
-def needs_confirmation() -> bool:
-    """External actions always need confirmation; counters are audit-only."""
-    return True
-
-
-def requires_confirmation(_action: dict[str, Any]) -> bool:
-    """Fail closed for network, computer-use, file, and unknown external actions."""
-    return True
-
 
 def _format_action_summary(action: dict[str, Any]) -> str:
     parts = [f"  Action: {action.get('action', 'unknown')}"]
