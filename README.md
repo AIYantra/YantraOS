@@ -1,694 +1,251 @@
+# yantraOS
 
-<div align="center">
+> An Arch Linux-based research system for building safer, human-supervised AI actions on a personal computer.
 
-```
-██╗   ██╗ █████╗ ███╗   ██╗████████╗██████╗  █████╗  ██████╗ ███████╗
-╚██╗ ██╔╝██╔══██╗████╗  ██║╚══██╔══╝██╔══██╗██╔══██╗██╔═══██╗██╔════╝
- ╚████╔╝ ███████║██╔██╗ ██║   ██║   ██████╔╝███████║██║   ██║███████╗
-  ╚██╔╝  ██╔══██║██║╚██╗██║   ██║   ██╔══██╗██╔══██║██║   ██║╚════██║
-   ██║   ██║  ██║██║ ╚████║   ██║   ██║  ██║██║  ██║╚██████╔╝███████║
-   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═══╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝
-```
+```text
+YOUR OS HAS BEEN PASSIVE FOR TOO LONG.
 
-### `यन्त्र` — *Instrument. Engine. Autonomous Entity.*
+The computer was always capable of thinking.
+We just never asked it to.
 
-**The world's first Autonomous Agent Operating System.**  
-*It does not wait. It does not sleep. It thinks.*
-
-<br/>
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-00FFFF?style=for-the-badge&logo=opensourceinitiative&logoColor=000000)](https://opensource.org/licenses/MIT)
-[![Platform](https://img.shields.io/badge/Platform-Arch%20Linux%20%7C%20Bare%20Metal-1793D1?style=for-the-badge&logo=archlinux&logoColor=white)](https://archlinux.org)
-[![Engine](https://img.shields.io/badge/Engine-Python%203.12%20%7C%20Asyncio-FFD700?style=for-the-badge&logo=python&logoColor=000000)](https://python.org)
-[![UI](https://img.shields.io/badge/Interface-Pure%20TUI%20%7C%20Textual-0057FF?style=for-the-badge&logo=gnometerminal&logoColor=white)]()
-[![Status](https://img.shields.io/badge/Status-v0.2.4-00FF41?style=for-the-badge)](https://github.com/AIYantra/YantraOS/releases/tag/v0.2.4)
-[![Phase](https://img.shields.io/badge/Phase-Vision%202%20P0%20%2B%20M7%20Complete-FFB000?style=for-the-badge)](CHANGELOG.md)
-[![IPC](https://img.shields.io/badge/IPC-UNIX%20Domain%20Socket-00FF41?style=for-the-badge&logo=linux&logoColor=000000)]()
-[![Discord](https://img.shields.io/discord/1472285496129355847?color=00E5FF&label=Sovereign%20Fleet&logo=discord&logoColor=101010&style=for-the-badge)](https://discord.gg/tkg6XQBPpK)
-
-<br/>
-
-[![Open Collective Backers](https://img.shields.io/opencollective/backers/yantraos?style=for-the-badge&logo=opencollective&logoColor=ffffff&label=Backers&color=7B2FBE)](https://opencollective.com/yantraos)
-[![Open Collective Sponsors](https://img.shields.io/opencollective/sponsors/yantraos?style=for-the-badge&logo=opencollective&logoColor=ffffff&label=Sponsors&color=E040FB)](https://opencollective.com/yantraos#section-contributors)
-
-<br/>
-
-[**`www.yantraos.com`**](https://yantraos.com) · [**`Documentation`**](https://yantraos.gitbook.io) · [**`Roadmap`**](https://github.com/orgs/AIYantra/projects) · [**`Discord`**](https://discord.gg/tkg6XQBPpK)
-
-</div>
-
----
-
-<div align="center">
-
-```
-┌───────────────────────────────────────────────────────────────┐
-│  YOUR OS HAS BEEN PASSIVE FOR TOO LONG.                       │
-│                                                               │
-│  Every traditional OS is a hammer — it waits to be swung.    │
-│                                                               │
-│  YantraOS is a mind.                                          │
-│  It reasons. It remembers. It acts. On its own.               │
-└───────────────────────────────────────────────────────────────┘
+— yantraOS
 ```
 
-</div>
+yantraOS explores a simple question: what would it take for a computer to understand an instruction, choose the least expensive reliable way to carry it out, and stay inside clear security boundaries?
 
----
+The answer is not unrestricted shell access. yantraOS separates unprivileged reasoning, bounded desktop automation, a root-only sandbox broker, typed host intents, confirmation, audit records, and BTRFS recovery points.
 
-## `01` · THE PHILOSOPHY
+**Current community release:** the M7 signed live-boot ISO. It has been manually verified in QEMU. Treat it as an early, disposable-system release, not a daily-driver operating system.
 
-> *"Yantra"* — Sanskrit (यन्त्र): A geometric instrument of divine computation. Used in Vedic cosmology to represent structured pathways through which consciousness operates on matter.
+| | |
+|---|---|
+| License | [MIT](LICENSE) |
+| Foundation | Arch Linux, systemd, Python |
+| Current release track | M7 signed live image |
+| Public installer | Not released yet |
 
-YantraOS is not a Linux distribution with AI bolted on. It is an **inversion of the computing paradigm**.
+## What Works Today
 
-The conventional model: **Human → Input → OS → Output**
+The following is verified project evidence, not a promise of universal hardware support:
 
-The YantraOS model: **OS senses context → OS reasons → OS acts → Human observes & overrides**
+| Capability | Current state |
+|---|---|
+| Signed ArchISO and fixed Azure VHD | Built and booted in QEMU; Azure provisioning was manually validated. |
+| Deterministic action routing | File creation/moves and known app launches can select a CLI fast path rather than a visual loop. |
+| Visual computer use | Browser and desktop workflows were manually verified on the supported KDE/Wayland test setup. |
+| Bounded file management | Create, read, and no-overwrite move operations are confined to `~/Documents/YantraOS`. |
+| Privileged boundary | The root executor accepts a typed restart of `yantra.service`; arbitrary shell commands are rejected. |
+| Sandboxed generated scripts | A root-owned broker runs a fixed Docker policy with no network or host mounts. |
+| Local control plane | The daemon exposes a loopback-only HTTP API at `127.0.0.1:50000`. |
 
-Your machine becomes an **autonomous entity** with goals, memory, and judgment. You are no longer an operator. You are a *principal* — the highest authority in a hierarchy of agents that manage your computational environment on your behalf.
+Desktop automation requires an active logged-in desktop session. It fails closed without one.
 
----
+## Release Status
 
-## `02` · THE ARCHITECTURE
+### Available today
 
-YantraOS is built on a **strict two-process, mathematically decoupled architecture**. No monolith. No race conditions between UI and intelligence.
+- The M7 community live image and its signed checksum.
+- The source tree, security regression tests, ISO forge, and Azure fixed-VHD forge.
+- The core action, confirmation, audit, sandbox, and host-executor boundaries.
 
-```
-┌──────────────────────────────────────────────────────────────┐
-│              BARE-METAL ARCH LINUX                           │
-│         (Boots to raw TTY1 — no display manager)            │
-├──────────────────────────────────────────────────────────────┤
-│                                                              │
-│  PROCESS A: yantra.service (systemd daemon)                  │
-│  ┌────────────────────────────────────────────────────────┐  │
-│  │  ┌─────────┐  ┌──────────┐  ┌────────────┐  ┌───────┐ │  │
-│  │  │  SENSE  │→ │ REMEMBER │→ │   REASON   │→ │  ACT  │ │  │
-│  │  │telemetry│  │ ChromaDB │  │  LiteLLM   │  │Docker │ │  │
-│  │  │CPU/GPU  │  │ RAG/Vec  │  │Local/Cloud │  │Sandbox│ │  │
-│  │  └─────────┘  └──────────┘  └────────────┘  └───────┘ │  │
-│  │                    THE KRIYA LOOP                      │  │
-│  └───────────────────────┬────────────────────────────────┘  │
-│                          │                                   │
-│              /run/yantra/ipc.sock                            │
-│              (UNIX Domain Socket — IPC Bridge)               │
-│                          │                                   │
-│  PROCESS B: tui_shell.py (Textual UI, yantra_user)           │
-│  ┌────────────────────────────────────────────────────────┐  │
-│  │ ╔══════════════╦═══════════════════════╦═════════════╗ │  │
-│  │ ║  TELEMETRY   ║  THOUGHTSTREAM        ║  COMMAND    ║ │  │
-│  │ ║  CPU:  12%   ║ [SENSE]  reading...   ║             ║ │  │
-│  │ ║  RAM: 4.1GB  ║ [REASON] analyzing... ║             ║ │  │
-│  │ ║  GPU:   0%   ║ [ACT]    exec done    ║  > _        ║ │  │
-│  │ ╚══════════════╩═══════════════════════╩═════════════╝ │  │
-│  │          Electric Blue · 3-Pane Textual HUD            │  │
-│  └────────────────────────────────────────────────────────┘  │
-│                                                              │
-└──────────────────────────────────────────────────────────────┘
-```
+### In development
 
-### The Decoupling Guarantee
+- The M8 personal-PC installer path. It is being validated on disposable systems and will be published separately only after real non-primary-machine usage.
+- Broader hardware and boot-mode coverage for the installer.
 
-The daemon **cannot crash the UI**. The UI **cannot deadlock the engine**. They share only one thing: a structured JSON stream over a UNIX socket. The intelligence is sovereign.
+### Future vision
 
----
+- A hosted runtime.
+- A browser-accessible experience.
+- A skill marketplace, only after sandbox and remote-revocation requirements are met.
 
-## `03` · THE KRIYA LOOP
+Those are roadmap items, not current product capabilities.
 
-> *"Kriya"* — Sanskrit (क्रिया): Action. Specifically, purposeful, intentional action guided by conscious awareness.
+## How It Works
 
-This is the heartbeat of YantraOS. It runs perpetually inside `yantra.service`. It never pauses.
+yantraOS intentionally does not present one unchecked model output as a system command. Its active paths are separate and narrow:
 
-```
-              ┌───────────────────────────────────┐
-              │                                   │
-        ┌─────▼──────┐                            │
-        │   SENSE    │  CPU · RAM · GPU · Disk    │
-        │            │  Logs · Network · Temps    │
-        └─────┬──────┘                            │
-              │                                   │
-        ┌─────▼──────┐                            │
-        │  REMEMBER  │  ChromaDB Vector Search    │
-        │            │  Retrieve past context     │
-        └─────┬──────┘                            │
-              │                                   │
-        ┌─────▼──────┐                            │
-        │   REASON   │  LiteLLM Inference Call    │
-        │            │  Local Model or Cloud API  │
-        └─────┬──────┘                            │
-              │                                   │
-        ┌─────▼──────┐                            │
-        │    ACT     │  Execute in Docker Sandbox │
-        │            │  SSH (whitelisted cmds)    │
-        └─────┬──────┘                            │
-              │                                   │
-        ┌─────▼──────┐                            │
-        │    LEARN   │  Embed outcome in ChromaDB │
-        │            │  Push heartbeat to Cloud   │
-        └─────┬──────┘                            │
-              │                                   │
-              └───────────────────────────────────┘
-                            ∞  forever
+```text
+Natural-language instruction
+          |
+          v
+Action classification and confirmation
+          |
+          +--> Deterministic fast path
+          |      Bounded file actions or known app launches
+          |
+          +--> Desktop automation
+          |      Screenshot -> one action -> visible verification
+          |      Runs in the logged-in user session
+          |
+          +--> Generated script
+                 Unprivileged client -> root sandbox broker -> Docker
+
+Typed host intent
+          |
+          v
+/run/yantra/executor.sock -> root executor -> allowlisted operation
 ```
 
-Each tick of the loop is a **cognitive cycle**. Your machine diagnoses itself, recalls what it has done before, reasons about what to do next, and acts — in a sandboxed, audited environment.
+Alongside those action paths, `yantra.service` runs the core daemon as `yantra_daemon`. Its current execution loop is `SENSE -> REASON -> ACT`, and its state/control API binds only to `127.0.0.1:50000`.
 
----
+## Security Model
 
-## `04` · THE HYBRID INFERENCE ENGINE
+The security posture is intentionally conservative:
 
-Hardware should not be a barrier to intelligence. YantraOS routes every inference request to the optimal backend based on what hardware is actually present.
+- `yantra_daemon` is unprivileged and has no Docker-group access.
+- The Docker broker is root-owned; it authorizes the daemon through Unix peer credentials.
+- Sandbox containers have no network, no host mounts, a read-only root filesystem, no Linux capabilities, `no-new-privileges`, and bounded CPU, memory, PID, output, and execution time.
+- The host executor uses typed JSON, explicit argument arrays, strict field validation, peer credential checks, and BTRFS preflight snapshots where applicable.
+- Confirmation and audit hooks surround external actions.
+- Runtime credentials belong in root-owned service environment files, never in Git or the ISO image.
 
-```
-         ┌─────────────────────────────────────────┐
-         │           HARDWARE DETECTION             │
-         └────────────────┬────────────────────────┘
-                          │
-          ┌───────────────┼───────────────┐
-          │               │               │
-          ▼               ▼               ▼
-┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐
-│  ALPHA MODE     │ │   EDGE MODE     │ │   DARK MODE     │
-│                 │ │                 │ │ (Net Offline)   │
-│ NVIDIA / AMD    │ │ Integrated GPU  │ │                 │
-│ VRAM >= 8 GB    │ │ CPU Only / Pi   │ │ Phi-3, Gemma-2B │
-│                 │ │                 │ │ or halt ops     │
-│ Ollama (Local)  │ │ Gemini 2.0 /   │ │                 │
-│ Llama-3 70B     │ │ Claude / GPT-4o │ │ Graceful degrade│
-│ 100% Offline    │ │ via LiteLLM    │ │ Offline ops only│
-└─────────────────┘ └─────────────────┘ └─────────────────┘
-```
+Desktop actions are deliberately not described as sandboxed. They operate in a real user session and therefore require explicit confirmation, visible verification, and audit coverage.
 
-**The router is `LiteLLM`.** It abstracts every model behind a single unified API call. You write one reasoning call. LiteLLM decides the backend. Privacy is preserved by default — cloud is the exception, not the rule.
+## Boot the Community ISO
 
----
+Use a disposable VM or non-primary machine. The M7 image is a **live boot** release; do not treat it as the public personal-PC installer.
 
-## `05` · THE SECURITY MODEL
-
-An AI that can execute system commands is one of the most dangerous systems ever deployed on a personal machine. YantraOS takes this seriously.
-
-```
-  THREAT SURFACE ANALYSIS
-  ═══════════════════════════════════════════════════════════════
-
-  [X]  LLM hallucination → rm -rf /
-  [✓]  MITIGATION: LLM output is NEVER executed on the host.
-
-  [X]  Daemon privilege escalation
-  [✓]  MITIGATION: Daemon runs as yantra_daemon (UID 999).
-
-  [X]  Container escape to host filesystem
-  [✓]  MITIGATION: Docker has NO network OR host mount.
-
-  [X]  Unrestricted SSH command execution
-  [✓]  MITIGATION: SSH key allows ONLY whitelisted commands.
-              { systemctl restart X, pacman -Syu, ... }
-
-  [X]  Secrets exfiltration via LLM prompt injection
-  [✓]  MITIGATION: Secrets in /etc/yantra/secrets.env (0400).
-              Never interpolated into model context.
-
-  [X]  IPC Bridge interception / Remote execution
-  [✓]  MITIGATION: All privileged IPC endpoints (like /inject) are strictly 
-              bound to 127.0.0.1. Pydantic data minimization drops 
-              all extra payload keys to prevent payload smuggling.
-```
-
-**The Execution Chain (for any system action):**
-
-```
-  LLM OUTPUT → JSON Schema Validation → Docker Container
-      → Restricted Alpine Shell → SSH (whitelisted key)
-          → Host Command Executor (allowlist only)
-```
-
-Nothing bypasses this chain. No exceptions. No overrides.
-
----
-
-## `06` · THE TUI — YOUR WINDOW INTO THE MACHINE'S MIND
-
-The UI is not a control panel. It is a **real-time window into the daemon's consciousness stream**.
-
-```
-╔══════════════════════════════════════════════════════════╗
-║  Y A N T R A O S  ·  v1.0-alpha  ·  node: alpha-01      ║
-╠══════════════════╦═══════════════════════╦═══════════════╣
-║  TELEMETRY       ║  THOUGHTSTREAM        ║  COMMAND      ║
-║                  ║                       ║               ║
-║  CPU  ████░░ 12% ║ [SENSE]  reading...   ║               ║
-║  RAM  ███░░░ 4.1G║ [REASON] analyzing... ║               ║
-║  GPU  █░░░░░  3% ║ [ACT]    exec done    ║               ║
-║  DISK ████░░  67%║ [LEARN]  embedding... ║               ║
-║  NET  ↑12K ↓88K  ║                       ║               ║
-║                  ║                       ║               ║
-║  UPTIME 3d 14:22 ║                       ║  > _          ║
-╚══════════════════╩═══════════════════════╩═══════════════╝
-```
-
-**Color system:** Electric Blue `#00E5FF` structural chrome · `#00FF41` telemetry confirmations · `#FFB000` alerts · `#888888` sub-text.
-
-**Connects to the daemon via:** `/run/yantra/ipc.sock` — a UNIX Domain Socket streaming structured JSON telemetry every cycle.
-
----
-
-## `07` · THE TELEGRAM C2 GATEWAY
-
-YantraOS operates headless and fully isolated, but you are always in control. The **Telegram C2 Gateway** provides an out-of-band asynchronous control plane directly from your smartphone.
-
-- **Proactive Push Notifications:** Receive instant text-based push alerts whenever a priority injected task completes or fails. The Engine features a built-in retry queue (up to 3x) and prevents LLM cognitive hallucinations by temporarily wiping conversation history when you issue a direct priority command.
-- **Diagnostic Controls:** Run `/debug` at any time to instantly pull live environment variables, Azure OpenAI credentials integrity, and hybrid router state straight to your phone.
-- **Mission Overrides:** Inject sovereign intents like `/api UPDATE_SECRETS` or `/task Analyze the memory dump` from anywhere in the world.
-
----
-
-## `08` · THE STACK
-
-```
-LAYER               TECHNOLOGY              PURPOSE
-────────────────────────────────────────────────────────────────
-Boot                Arch Linux (linux-lts)  Stable, minimal kernel
-Init                systemd                 Daemon lifecycle + IPC
-OS Interface        Python 3.12 / asyncio   Daemon orchestration
-Inference Router    LiteLLM                 Model abstraction layer
-Local Inference     Ollama                  Private on-device LLMs
-Vector Memory       ChromaDB                Skill/context storage
-Execution Sandbox   Docker + Alpine         Safe command execution
-Host SSH Gateway    OpenSSH (allowlist)     Whitelisted host control
-TUI Framework       Textual + Rich          Terminal HUD renderer
-IPC Transport       UNIX Domain Socket      Daemon <-> UI bridge
-Telemetry Cloud     Next.js + Supabase      Fleet monitoring
-Deployment Host     Vercel                  www.yantraos.com
-Secret Management   pydantic-settings       /etc/yantra/secrets.env
-Filesystem          Btrfs (+ Snapper)       Atomic snapshots
-Skill Store         Pinecone (1536-dim)     Semantic skill retrieval
-OTA Manager         SystemD + pacman hook   Autonomous self-update
-```
-
----
-
-## `08` · REPOSITORY ANATOMY
-
-```
-YantraOS/
-│
-├── archlive/                    # ArchISO build pipeline
-│   ├── forge_sovereign_iso.sh   # Signed, fail-closed build orchestrator
-│   ├── airootfs/                # Live filesystem overlay
-│   │   ├── etc/                 # systemd units, users, sysctl
-│   │   └── opt/yantra/          # Deployed daemon files
-│   ├── packages.x86_64          # Package manifest
-│   └── profiledef.sh            # ISO metadata
-│
-├── core/                        # The Cognitive Engine
-│   ├── daemon.py                # Orchestrator: the Kriya Loop
-│   ├── engine.py                # LLM reasoning + LiteLLM calls
-│   ├── hardware.py              # CPU / RAM / GPU telemetry probes
-│   ├── vector_memory.py         # ChromaDB async RAG interface
-│   ├── ipc_server.py            # FastAPI UDS IPC — 8-action router
-│   ├── cloud.py                 # Heartbeat to yantraos.com
-│   ├── sandbox_broker.py        # Root-only fixed-policy Docker broker
-│   ├── sandbox_client.py        # Authenticated unprivileged broker client
-│   └── sandbox/Dockerfile       # Digest-pinned Alpine executor
-│
-├── deploy/                      # systemd service + polkit rules
-├── docs/                        # Architecture diagrams
-├── scripts/                     # OTA + maintenance scripts
-├── web/                         # Next.js cloud dashboard
-│   └── src/app/api/
-│       └── telemetry/ingest/    # Fleet heartbeat ingest API
-│
-├── config.yaml                  # Global daemon configuration
-├── requirements.txt             # Python dependencies
-└── YANTRA_MASTER_CONTEXT.md     # Living architecture specification
-```
-
----
-
-## `09` · BOOT SEQUENCE
-
-```
-  [BIOS/UEFI]
-       │
-       ▼
-  [GRUB bootloader]
-       │
-       ▼
-  [Linux kernel] --> Headless, no remote login.
-       │
-       ▼
-  [TTY1: raw terminal]
-       │
-       ├--> [systemd] starts yantra.service --> Kriya Loop begins ∞
-       │             (runs as yantra_daemon)
-       │
-       └--> [yantra-provision-secrets.service]
-                  │
-                  └── Key Vault managed identity or boot-media provisioning
-```
-
-The daemon starts only after credential provisioning and sandbox-broker readiness.
-
----
-
-## `10` · GETTING STARTED
-
-> ⚠️ **Pre-Alpha Software.** Not for use as a primary OS. QEMU/VM testing is strongly recommended.
-
-### Prerequisites
-
-| Requirement | Minimum | Recommended |
-|:---|:---:|:---:|
-| RAM | 8 GB | 16 GB+ |
-| Storage | 50 GB | 100 GB (Btrfs) |
-| GPU | None (Cloud mode) | NVIDIA RTX (Local mode) |
-| Network | Required at boot | Always-on for fleet mode |
-
-### Build the ISO
+After downloading an ISO, checksum, and signature from [GitHub Releases](https://github.com/AIYantra/YantraOS/releases), verify the checksum from the directory that contains them:
 
 ```bash
-# Clone the repository
-git clone https://github.com/AIYantra/YantraOS.git
-cd YantraOS
-
-# Build the ArchISO (requires: archiso, Docker, root)
-cd archlive
-sudo -E bash forge_sovereign_iso.sh
+sha256sum -c yantraos-*.iso.sha256
 ```
 
-The signed ISO is written to `/opt/yantra-releases/yantraos-*.iso`.
-
-### Test in QEMU
+Test a single downloaded ISO in QEMU:
 
 ```bash
 qemu-system-x86_64 \
   -m 4G \
   -enable-kvm \
   -cpu host \
-  -cdrom /opt/yantra-releases/yantraos-*.iso \
-  -nographic \
-  -serial mon:stdio
+  -cdrom yantraos-*.iso \
+  -boot d
 ```
 
-### Run the Daemon Locally (Dev Mode)
+The live image intentionally does not carry operational secrets. Follow `.env.example` and the release instructions to provision valid runtime credentials. Never commit a populated `.env` file.
+
+## Run From Source
+
+The development environment needs Python 3.12, Docker for sandbox checks, and valid provider credentials for real model-backed actions.
 
 ```bash
-# Create and activate virtual environment
-python3 -m venv .venv && source .venv/bin/activate
+git clone https://github.com/AIYantra/YantraOS.git
+cd YantraOS
 
-# Install hash-locked dependencies
-pip install --require-hashes -r requirements.lock
+python3 -m venv venv
+venv/bin/pip install --require-hashes -r requirements.lock
 
-# Provision a strong YANTRA_CONTROL_TOKEN and required credentials first.
-python3 -m core.daemon
+# Create a private local environment file and supply valid values before real actions.
+cp .env.example .env
+chmod 600 .env
 ```
 
----
+At minimum, `YANTRA_CONTROL_TOKEN` must be a valid value of 32 or more characters. Azure-backed paths also require the relevant values from `.env.example`.
 
-## `11` · ARCHITECTURAL DECISIONS
-
-| ADR | Decision | Rationale |
-|:---|:---|:---|
-| `ADR-001` | **Python over Rust/Go** | Python unlocks LiteLLM, ChromaDB, PyTorch in weeks, not months. Performance-critical paths are earmarked for Rust rewrites in v2. |
-| `ADR-002` | **Docker Sandbox for execution** | LLM hallucinations are real. No command ever touches the host directly. Docker provides a disposable blast radius. |
-| `ADR-003` | **Arch Linux foundation** | Rolling release, bleeding-edge kernel, minimal bloat. We build exactly what we need. No Debian cruft to excise. |
-| `ADR-004` | **Pure TUI, no display manager** | Eliminates Wayland/X11 complexity. Reduces attack surface. Maximizes stability on diverse hardware. |
-| `ADR-005` | **UNIX socket IPC** | Zero-latency, zero-network-overhead communication between daemon and UI on the same host. No HTTP overhead. No port exposure. |
-| `ADR-006` | **LiteLLM as router** | One API call, any model, any backend. Switching from Llama to Claude requires zero code changes in the engine. |
-| `ADR-007` | **Pinecone for Skill Store** | 1536-dim cosine index provides semantic retrieval for shareable autonomous behaviors across the fleet. |
-| `ADR-008` | **OTA via systemd + pacman hooks** | Atomic, pre-snapshotted self-update avoids manual operator intervention while preserving rollback guarantees. |
-
----
-
-## `12` · CURRENT STATE · VISION 2 PHASE 0 / M7 COMPLETE
-
-**Manually verified July 21, 2026:** deterministic CLI/API fast paths, screenshot computer use, signed ISO boot in QEMU, fixed VHD boot in QEMU, and hardened Azure deployment through managed identity and Key Vault. The validated artifacts are build-complete; public ISO publication remains a separate Phase 1 task.
-
-```
-  MILESTONE TRACKER                    STATUS: v1.0 ALPHA RC2 [✓]
-  ════════════════════════════════════════════════════════════════
-
-  PHASE 1 — CORE DAEMON (COMPLETE)
-  [✓] Kriya Loop orchestration (SENSE > REMEMBER > REASON > ACT > LEARN)
-  [✓] Hardware telemetry probes (CPU / RAM / GPU)
-  [✓] LiteLLM hybrid inference router (Local + Cloud fallback)
-  [✓] ChromaDB async vector memory (graceful degradation)
-  [✓] pydantic-settings configuration system
-
-  PHASE 2 — IPC BRIDGE & TUI (COMPLETE)
-  [✓] FastAPI ASGI over UNIX Domain Socket (/run/yantra/ipc.sock)
-  [✓] Textual TUI — 3-pane HUD (Telemetry / ThoughtStream / Command)
-  [✓] SSE ThoughtStream + /telemetry polling (2s cadence)
-  [✓] Daemon <-> TUI mathematically decoupled
-  [✓] systemd watchdog (WatchdogSec=15, phase-linked heartbeat)
-  [✓] POST /command router — 8 registered actions:
-        ping · status · get_phase · help
-        pause_loop · resume_loop · inject_thought · shutdown
-
-  PHASE 3 — SKILL STORE (COMPLETE)
-  [✓] Pinecone yantra-skills index (1536-dim cosine)
-  [✓] Skill schema v1 (yantraos/skill/v1) locked
-  [✓] /api/skills/search — semantic RAG query endpoint live
-  [✓] Web HUD Skill Store page (4 skills, category filter)
-  [✓] Genesis probe record seeded
-
-  PHASE 4 — AUTONOMOUS OTA EVOLUTION (COMPLETE)
-  [✓] OTA Manager Web HUD page (/architecture)
-  [✓] POST /api/ota/trigger — systemd-backed update pipeline
-  [✓] BTRFS pre-snapshot before every OTA transaction
-  [✓] Real-time OTA telemetry streamed to HUD
-  [✓] Docker sandbox execution path verified on bare metal
-  [✓] Compile ISO hardened (6-invariant rewrite)
-
-  PHASE 5 — SYSTEM HARDENING & AI ANCHORING (COMPLETE)
-  [✓] Patched AI environmental hallucination (anchored to bare-metal USB)
-  [✓] Enforced strict IPv4 loopback constraints for IPC resiliency
-  [✓] Stateless dynamic secrets injection pipeline (systemd drop-ins)
-  [✓] Purged initramfs hooks / enforced minimal archiso + zstd compression
-  [✓] Bypassed initramfs sulogin via SYSTEMD_SULOGIN_FORCE=1
-  [✓] Autonomous dependency healing (LiteLLM cache Amnesia immunity)
-
-  PHASE 6 — ALPHA RC2 SURVIVAL GATES & WEB HUD (COMPLETE)
-  [✓] BTRFS nodatacow integrity enforced via chattr +C & yantra-live-setup.service
-  [✓] LLM action queue capped (MAX_PENDING_ACTIONS=5) preventing memory leaks
-  [✓] Dynamic AMD VRAM OOM sysfs probe routing APUs to CLOUD_ONLY
-  [✓] Thread-safe asyncio.Lock shared between KriyaLoop and IPC server
-  [✓] Web HUD kinetic redesign (Sora/JetBrains Mono, 0px radius, 1px cyan dividers)
-  [✓] Archiso packaging daemon bootstrap fix via PYTHONPATH injection
-  [✓] forge_sovereign_iso.sh path and ownership boundaries hardened
-
-  VISION 2 PHASE 0
-  [✓] Azure credential rotation and artifact secret remediation
-  [✓] CLI/API fast-path routing with visible route explanation
-  [✓] YC demo rehearsal: fast path versus screenshot loop
-  [✓] Signed hardened ISO built and booted in QEMU
-  [✓] Fixed VHD built, booted in QEMU, and deployed successfully to Azure
-
-  ONGOING
-  [~] Restricted SSH whitelisted command gateway
-  [✓] Typed-intent -> sandbox/external bridge -> audit/circuit-breaker tests
-  [ ] NVIDIA driver injection on live ISO
-  [ ] Multi-node fleet management (Alpha + Edge topology)
-```
-
----
-
-## `13` · CLOUD TELEMETRY
-
-Every YantraOS node reports a heartbeat to the central fleet dashboard. Data is minimal and auditable.
-
-```json
-{
-  "node_id":      "alpha-01",
-  "timestamp":    "2026-03-27T00:00:00Z",
-  "cpu_percent":  12.4,
-  "ram_used_gb":  4.1,
-  "vram_used_gb": 0.0,
-  "last_action":  "scheduled fstrim",
-  "loop_cycle":   14827,
-  "routing":      "CLOUD_ONLY",
-  "status":       "REASONING"
-}
-```
-
-The cloud dashboard ([`www.yantraos.com`](https://yantraos.com)) aggregates fleet health, loop cycle counts, and action logs across all registered nodes.
-
----
-
-## `14` · CONTRIBUTION
-
-YantraOS is built in public. Contributions are accepted but the architecture is opinionated.
-
-**Before opening a PR, understand the constraints:**
-- Every new subsystem must fail **gracefully**. The Kriya Loop must never hard-crash.
-- All AI-generated command execution must route through the Docker sandbox. No exceptions.
-- Privileged Docker access must remain confined to the authenticated sandbox broker.
+Useful entry points:
 
 ```bash
-# Development workflow
-git checkout -b feature/your-feature
-# ... implement ...
-python3 -m core.daemon     # verify daemon starts clean
-python3 -m unittest discover
-git push origin feature/your-feature
-# Open PR against main
+# Core daemon. Requires a valid runtime environment.
+venv/bin/python -m core.daemon
+
+# Natural-language action path. Requires a configured provider and desktop session where applicable.
+venv/bin/python -m core.yantra_core "create a project brief in Documents/YantraOS"
+
+# Native desktop shell. Run only in an active desktop session.
+venv/bin/python -m ui.gui_shell
 ```
 
----
+Read-only local diagnostics:
 
-## `14.5` · FUEL THE MACHINE ⚡
-
-<div align="center">
-
-<br/>
-
-```
-╔════════════════════════════════════════════════════════════════════╗
-║                                                                    ║
-║   YantraOS runs on bare metal.  Our infrastructure does not.       ║
-║                                                                    ║
-║   Every cycle of the Kriya Loop costs real compute.               ║
-║   Every QA test on physical hardware costs real time.             ║
-║   Every byte of open-source code costs real developer-hours.      ║
-║                                                                    ║
-║   If this project sparks something in you — fund the spark.       ║
-║                                                                    ║
-╚════════════════════════════════════════════════════════════════════╝
+```bash
+curl http://127.0.0.1:50000/health
+curl http://127.0.0.1:50000/state
+systemctl status yantra.service yantra-sandbox-broker.service yantra-host-executor.service
 ```
 
-<br/>
+## Build a Development ISO
 
-### 🌐 Open Collective · Fiscal Transparency Ledger
+The forge is for Arch Linux maintainers. It builds a sandbox image, a Python environment, a locally built checksum-pinned Calamares package, and a signed ISO.
 
-> All funding is **100% transparent**, **publicly auditable**, and **governed by our Open Collective**.  
-> Every dollar in. Every dollar out. On-chain. In public.
+```bash
+sudo pacman -S --needed \
+  archiso btrfs-progs squashfs-tools arch-install-scripts \
+  rsync gnupg docker devtools pacman-contrib
 
-<br/>
+sudo systemctl enable --now docker
 
-**[→ opencollective.com/yantraos](https://opencollective.com/yantraos)**
-
-<br/>
-
----
-
-### 🏛️ Where Your Capital Flows
-
-<br/>
-
-| 🔧 Infrastructure Matrix | 🖥️ Bare-Metal QA Lab | 👨‍💻 Core Developer Stipends |
-|:---:|:---:|:---:|
-| Cloud telemetry relay nodes, Supabase fleet DB, Vercel edge functions, Pinecone semantic index | Physical x86 test rigs, GPU validation hardware, network switches, KVM-over-IP units | Stipends for contributors maintaining the Kriya Loop, IPC bridge, and ISO build pipeline |
-
-<br/>
-
----
-
-### 🥇 Sponsors
-
-*The organizations and individuals powering the Infrastructure Matrix.*
-
-<br/>
-
-[![Become a Sponsor](https://opencollective.com/yantraos/tiers/sponsors.svg?avatarHeight=80&width=800)](https://opencollective.com/yantraos#section-contributors)
-
-<br/>
-
-<a href="https://opencollective.com/yantraos#section-contributors">
-  <img src="https://img.shields.io/opencollective/sponsors/yantraos?style=for-the-badge&logo=opencollective&logoColor=white&label=%E2%9A%A1%20Active%20Sponsors&color=7B2FBE" alt="Sponsors"/>
-</a>
-
-<br/><br/>
-
-**[🚀 Become a Sponsor →](https://opencollective.com/yantraos)**
-
-<br/>
-
----
-
-### 🤝 Backers
-
-*The community backbone keeping the Kriya Loop alive.*
-
-<br/>
-
-[![Become a Backer](https://opencollective.com/yantraos/tiers/backers.svg?avatarHeight=60&width=800)](https://opencollective.com/yantraos#section-contributors)
-
-<br/>
-
-<a href="https://opencollective.com/yantraos#section-contributors">
-  <img src="https://img.shields.io/opencollective/backers/yantraos?style=for-the-badge&logo=opencollective&logoColor=white&label=%F0%9F%A4%9D%20Community%20Backers&color=E040FB" alt="Backers"/>
-</a>
-
-<br/><br/>
-
-**[💜 Become a Backer →](https://opencollective.com/yantraos)**
-
-<br/>
-
----
-
-### 💡 Why Fund an Open-Source OS?
-
-```
-  THE VALUE PROPOSITION
-  ═══════════════════════════════════════════════════════════════
-
-  [✓]  100% open-source. Always. MIT licensed.
-  [✓]  Zero VC funding. Zero proprietary lock-in.
-  [✓]  Full fiscal transparency via Open Collective.
-  [✓]  Your name/logo on this README forever.
-  [✓]  Direct line to core architects for sponsors.
-  [✓]  Early access to Phase 6: Multi-Node Fleet Intelligence.
+read -r -p "Ed25519 signing-key path: " YANTRA_SIGNING_KEY
+export YANTRA_SIGNING_KEY
+sudo -E ./archlive/forge_sovereign_iso.sh
 ```
 
-<br/>
+Artifacts are written to `/opt/yantra-releases/` as an ISO with matching `.sha256` and `.sha256.sig` files.
 
-> *"The best infrastructure is the kind no one notices — until it's gone."*  
-> *Fund what matters before it disappears.*
+Do not publish a locally built installer image as a release until it has passed fresh-install and non-primary-machine validation.
 
-<br/>
+## Development Checks
 
-[![Fund on Open Collective](https://img.shields.io/badge/Fund%20on%20Open%20Collective-7B2FBE?style=for-the-badge&logo=opencollective&logoColor=white)](https://opencollective.com/yantraos)
+Prefer focused deterministic checks. Some root-level test files are manual or can invoke live integrations, so do not run every `test_*.py` blindly on a workstation.
 
-<br/>
+```bash
+venv/bin/python -m unittest test_computer_use_bridge.py
+venv/bin/python -m pytest -p no:cacheprovider test_external_action.py
+venv/bin/python test_deployment_security.py
+venv/bin/python -m unittest test_installer_profile.py
 
-</div>
-
----
-
-## `15` · LICENSE & ACKNOWLEDGMENTS
-
-Released under the **MIT License** — open metal, open mind.
-
-**YantraOS stands on the shoulders of:**
-
-```
-  Arch Linux     — The minimal, rolling foundation
-  systemd        — The init system that scales
-  LiteLLM        — The model-agnostic inference layer
-  Ollama         — Local LLM runtime
-  ChromaDB       — Embedded vector database
-  Pinecone       — Cloud-scale semantic skill store
-  Textual / Rich — Terminal UI artistry
-  Docker         — The sandbox that contains the blast
-  Python         — The language of the AI frontier
+venv/bin/python -m py_compile core/computer_use_bridge.py core/yantra_core.py
+bash -n archlive/forge_sovereign_iso.sh
 ```
 
----
+CI additionally runs linting, the regression suite, deployment policy checks, shell syntax checks, and a sandbox-image build.
 
-<div align="center">
+## Project Map
 
+```text
+archlive/       Signed ArchISO profile and forge
+cloud/          Fixed VHD forge and Azure deployment tooling
+core/           Daemon, action routing, sandbox, audit, and host executor
+deploy/         systemd units, sysusers, and tmpfiles policy
+scripts/        Provisioning and maintenance helpers
+ui/             PySide6 desktop shell and prototype interface
+test_*.py       Focused security and integration regression tests
 ```
-┌───────────────────────────────────────────────────────────┐
-│                                                           │
-│   The computer was always capable of thinking.           │
-│   We just never asked it to.                             │
-│                                                           │
-│                              — YantraOS                  │
-│                                                           │
-└───────────────────────────────────────────────────────────┘
-```
 
-**[`yantraos.com`](https://yantraos.com)** · **`/run/yantra/ipc.sock`** · **`∞`**
+## Contributing
 
-</div>
+Contributions are welcome when they strengthen a verified path rather than introduce speculative surface area.
+
+Before opening a pull request:
+
+1. Start from `main` and keep the change focused.
+2. Add or update the smallest deterministic test that protects the behavior.
+3. Preserve the trust boundaries: no raw privileged shell strings, no Docker access for `yantra_daemon`, no credential commits, and no bypass around confirmation or audit.
+4. Run the relevant focused checks.
+5. Document user-visible changes accurately.
+
+The current scope is intentionally narrow. Hosted runtime, marketplace, billing, and broader fleet work are not contribution targets until their roadmap conditions are met.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for issue and pull-request guidance.
+
+## FAQ
+
+### Is yantraOS a general-purpose Linux distribution?
+
+Not yet. It is an Arch-based research and systems project with a validated live-image path. The personal-PC installer is still under release validation.
+
+### Does yantraOS give an LLM unrestricted root access?
+
+No. The root executor is typed and allowlisted. In the current implementation, its supported host operation is restarting `yantra.service`; arbitrary host commands are rejected.
+
+### Does every action run in Docker?
+
+No. Model-generated scripts use the hardened Docker broker. Desktop automation necessarily runs in the logged-in desktop session and has separate confirmation, audit, and visible-verification safeguards.
+
+### Can I install software or manage windows through it today?
+
+Those are not verified community-release capabilities yet. Software installation, window management, and long-running task management remain unchecked in the project checklist.
+
+## License
+
+yantraOS is released under the [MIT License](LICENSE). Copyright 2026 Euryale Ferox Private Limited.
